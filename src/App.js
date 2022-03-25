@@ -1,49 +1,42 @@
-
 import React, { useState } from 'react';
 import ComponentA from './ComponentA';
 import ComponentB from './ComponentB';
 
-//functional component implementation
-// function App() {
-//   const [count, setCount] = useState(10);
-//   return(
-//     <><h1>counter value = {count}</h1>
-//     <ComponentA setCount={setCount} count={count} />
-//     <ComponentB setCount={setCount} count={count} />
-//     </>
-//   )
-// }
+function CounterState(value) {
+  this.state = {
+    value: value,
+    increaseCount : function () {
+      value++;
+      console.log(value)
+    },
+    decreaseCount: function () {
+      value--;
+      console.log(value)
+    },
+    getValue: function () {
+      return value;
+    }
+  }
+}
 
-
-//class component implementation
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      count: 10
-    }
-    this.handleCount = this.handleCount.bind(this);
+    this.counterState = new CounterState(10);
   }
 
-  handleCount(event){
-    const id = event.target.id;
-    switch(id) {
-      case 'increment':
-        this.setState({ count: this.state.count + 1 });
-        break;
-      case 'decrement':
-        this.setState({ count: this.state.count - 1 });
-        break;
-      default:
-        break;
-    }
-  }
+  //Since im not changing anything in App's state. It wont re-render by itself when counter is changed.
+  reRenderByForce = () => {
+    this.forceUpdate();
+  };
 
   render() {
+    const { getValue, increaseCount, decreaseCount } = this.counterState.state;
     return (
-      <><h1>counter value = {this.state.count}</h1>
-      <ComponentA handleCount={this.handleCount} />
-      <ComponentB handleCount={this.handleCount} />
+      <><h1>counter value = {getValue()}</h1>
+      <button onClick={this.reRenderByForce}>update value</button> 
+      <ComponentA increaseCount={increaseCount} decreaseCount={decreaseCount} />
+      <ComponentB  increaseCount={increaseCount} decreaseCount={decreaseCount} />
       </>
     )
   }
