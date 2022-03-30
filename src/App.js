@@ -1,45 +1,28 @@
-import React, { useState } from 'react';
-import ComponentA from './ComponentA';
-import ComponentB from './ComponentB';
 
-function CounterState(value) {
-  this.state = {
-    value: value,
-    increaseCount : function () {
-      value++;
-      console.log(value)
-    },
-    decreaseCount: function () {
-      value--;
-      console.log(value)
-    },
-    getValue: function () {
-      return value;
-    }
-  }
-}
+import React, { useEffect, useState } from 'react';
+import { getElement } from './factory';
 
-class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.counterState = new CounterState(10);
-  }
+export default function App(props) {
+  const [isButton, setIsButton] = useState(false);
+  const [isLabel, setIsLabel] = useState(false);
+  const [isCreate, setIsCreate] = useState(false);
 
-  //Since im not changing anything in App's state. It wont re-render by itself when counter is changed.
-  reRenderByForce = () => {
-    this.forceUpdate();
-  };
+  return(
+      <>
+        <h3>Button</h3>
+        <input type="checkbox" onChange={() => setIsButton(true)} />
+        <br/>
 
-  render() {
-    const { getValue, increaseCount, decreaseCount } = this.counterState.state;
-    return (
-      <><h1>counter value = {getValue()}</h1>
-      <button onClick={this.reRenderByForce}>update value</button> 
-      <ComponentA increaseCount={increaseCount} decreaseCount={decreaseCount} />
-      <ComponentB  increaseCount={increaseCount} decreaseCount={decreaseCount} />
+        <h3>Label</h3>
+        <input type="checkbox" onChange={() => setIsLabel(true)} />
+        <br/>
+
+        <button onClick={() => setIsCreate(true)}>Create</button>
+        <br/>
+
+        {isCreate && isButton && getElement('button')}
+        {isCreate && isLabel && getElement('label')}
       </>
-    )
-  }
-}
 
-export default App;
+  )
+}
