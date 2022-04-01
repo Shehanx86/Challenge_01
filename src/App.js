@@ -23,6 +23,5 @@ export default function App(props) {
         {isCreate && isButton && getElement('button')}
         {isCreate && isLabel && getElement('label')}
       </>
-
   )
 }
